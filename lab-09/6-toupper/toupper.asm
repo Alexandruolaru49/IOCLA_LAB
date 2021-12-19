@@ -1,7 +1,7 @@
 section .data
     before_format db "before %s", 13, 10, 0
     after_format db "after %s", 13, 10, 0
-    mystring db "abcdefghij", 0
+    mystring db "abcdefghijABD", 0
 
 section .text
 
@@ -11,22 +11,30 @@ global main
 toupper:
     push ebp
     mov ebp, esp
+    mov ecx, 8
+    mov eax, [ebp + 8]
 
-    ; TODO
-for:
-    mov edx, [mystring]
-    mov al, byte [edx]
-    cmp al, 0x0
-    je return
-    sub al, 0x20
-    mov [edx], al
-    inc edx
-    jmp for
+loop:
+	mov bl, byte [eax]
+	cmp ebx, 0
+	je return
+	cmp ebx, 0x61
+	inc eax
+	jb loop
 
+loop2:
+	dec eax
+	sub ebx, 0x20
+	mov byte [eax], bl
+	inc eax
+	jmp loop
 
 return:
-    leave
-    ret
+	inc ecx
+
+
+leave
+ret
 
 main:
     push ebp
